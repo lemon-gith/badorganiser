@@ -14,6 +14,7 @@
     clearCurrentSession,
   } from "../stores/sessions.svelte.ts";
   import type { SortKey } from "../types";
+  import ConfirmModal from "./ConfirmModal.svelte";
 
   // ─── Sort dropdown ────────────────────────────────────────────────────────
   let dropdownOpen = $state(false);
@@ -58,19 +59,13 @@
     if (window.innerWidth <= 768) toggleHistory();
   }
 
-  let confirmDelete = $state<string | null>(null);
+  // Holds the session pending deletion; null = modal closed
+  let pendingDelete = $state<{ id: string; name: string } | null>(null);
 
-  async function handleDelete(e: MouseEvent, id: string) {
+  function handleDelete(e: MouseEvent, id: string) {
     e.stopPropagation();
-    if (confirmDelete === id) {
-      await deleteSession(id);
-      confirmDelete = null;
-    } else {
-      confirmDelete = id;
-      setTimeout(() => {
-        if (confirmDelete === id) confirmDelete = null;
-      }, 3000);
-    }
+    const meta = sessionState.metas.find((m) => m.id === id);
+    if (meta) pendingDelete = { id, name: meta.name };
   }
 </script>
 
@@ -179,11 +174,8 @@
           </div>
           <button
             class="btn-icon delete-btn"
-            class:confirming={confirmDelete === meta.id}
             onclick={(e) => handleDelete(e, meta.id)}
-            title={confirmDelete === meta.id
-              ? "Click again to confirm delete"
-              : "Delete session"}
+            title="Delete session"
             aria-label="Delete session"
           >
             <Icon name="trash" size={14} />
@@ -201,6 +193,17 @@
       browser data or switching browsers will remove your history.
     </p>
   </div>
+  {#if pendingDelete}
+    <ConfirmModal
+      message="Are you sure you want to delete '{pendingDelete.name}'?"
+      confirmLabel="Delete"
+      onConfirm={async () => {
+        await deleteSession(pendingDelete!.id);
+        pendingDelete = null;
+      }}
+      onCancel={() => (pendingDelete = null)}
+    />
+  {/if}
 </aside>
 
 <style>
@@ -382,11 +385,7 @@
   .session-item:hover .delete-btn {
     opacity: 1;
   }
-  .delete-btn.confirming {
-    opacity: 1;
-    color: var(--color-error) !important;
-    background: var(--bg-error);
-  }
+
   .delete-btn:hover {
     color: var(--color-error) !important;
   }

@@ -34,7 +34,7 @@
 
     <a
       class="btn-icon topbar-btn"
-      href="https://github.com/your-username/team-organiser"
+      href="https://github.com/lemon-gith/redblue-pairs"
       target="_blank"
       rel="noopener noreferrer"
       title="View source on GitHub"

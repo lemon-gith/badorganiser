@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Icon from './Icon.svelte';
-  import type { PresetItemData, GeneratedPreset } from '../types';
+  import Icon from "./Icon.svelte";
+  import type { PresetItemData, GeneratedPreset } from "../types";
 
   let {
     preset,
@@ -10,18 +10,18 @@
     onRename,
     onDelete,
   }: {
-    preset:          PresetItemData;
+    preset: PresetItemData;
     generatedPreset: GeneratedPreset | undefined;
-    onGenerate:      (id: string) => void;
-    onDownload:      (id: string) => void;
-    onRename:        (id: string, name: string) => void;
-    onDelete:        (id: string) => void;
+    onGenerate: (id: string) => void;
+    onDownload: (id: string) => void;
+    onRename: (id: string, name: string) => void;
+    onDelete: (id: string) => void;
   } = $props();
 
   // ─── Editable name ────────────────────────────────────────────────────────
-  let editing  = $state(false);
-  let nameVal  = $state('');
-  let nameEl   = $state<HTMLInputElement | undefined>();
+  let editing = $state(false);
+  let nameVal = $state("");
+  let nameEl = $state<HTMLInputElement | undefined>();
 
   // Keep nameVal in sync with the prop whenever we're not actively editing
   $effect(() => {
@@ -45,29 +45,35 @@
   }
 
   function onNameKeydown(e: KeyboardEvent) {
-    if (e.key === 'Enter') { e.preventDefault(); commitEdit(); }
-    if (e.key === 'Escape') { editing = false; nameVal = preset.name; }
+    if (e.key === "Enter") {
+      e.preventDefault();
+      commitEdit();
+    }
+    if (e.key === "Escape") {
+      editing = false;
+      nameVal = preset.name;
+    }
   }
 
   // ─── Description ─────────────────────────────────────────────────────────
   const GAME_LABELS: Record<string, string> = {
-    mens:   "Men's Doubles",
+    mens: "Men's Doubles",
     womens: "Women's Doubles",
-    mixed:  'Mixed Doubles',
+    mixed: "Mixed Doubles",
   };
 
   function toggleDesc(t: Record<number, boolean>): string {
     return Object.entries(t)
       .sort(([a], [b]) => Number(a) - Number(b))
-      .map(([l, on]) => `L${l}${on ? '✓' : '✗'}`)
-      .join(' ');
+      .map(([l, on]) => `L${l}${on ? "✓" : "✗"}`)
+      .join(" ");
   }
 
   const description = $derived.by((): string => {
     const { gameType, toggleSettings: ts } = preset;
     const base = GAME_LABELS[gameType];
-    if (gameType === 'mens')   return `${base} · ${toggleDesc(ts.men)}`;
-    if (gameType === 'womens') return `${base} · ${toggleDesc(ts.women)}`;
+    if (gameType === "mens") return `${base} · ${toggleDesc(ts.men)}`;
+    if (gameType === "womens") return `${base} · ${toggleDesc(ts.women)}`;
     return `${base} · Men: ${toggleDesc(ts.men)} · Women: ${toggleDesc(ts.women)}`;
   });
 
@@ -83,13 +89,15 @@
   }
 
   const GAME_TYPE_CLASS: Record<string, string> = {
-    mens:   'tag-mens',
-    womens: 'tag-womens',
-    mixed:  'tag-mixed',
+    mens: "tag-mens",
+    womens: "tag-womens",
+    mixed: "tag-mixed",
   };
 
   const GAME_TYPE_SHORT: Record<string, string> = {
-    mens: "Men's", womens: "Women's", mixed: 'Mixed',
+    mens: "Men's",
+    womens: "Women's",
+    mixed: "Mixed",
   };
 </script>
 
@@ -111,7 +119,11 @@
         aria-label="Preset name"
       />
     {:else}
-      <button class="preset-name" ondblclick={startEdit} title="Double-click to rename">
+      <button
+        class="preset-name"
+        ondblclick={startEdit}
+        title="Double-click to rename"
+      >
         {preset.name}
       </button>
     {/if}
@@ -179,7 +191,9 @@
     background: var(--bg-surface);
     border: 1px solid var(--border);
     box-shadow: var(--shadow-sm);
-    transition: border-color 0.15s, box-shadow 0.15s;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
     min-width: 0;
   }
 
@@ -197,7 +211,7 @@
   .type-tag {
     font-size: 10px;
     font-weight: 700;
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     letter-spacing: 0.06em;
     padding: 3px 7px;
     border-radius: var(--radius-sm);
@@ -205,9 +219,18 @@
     white-space: nowrap;
   }
 
-  .tag-mens   { background: var(--bg-info);   color: var(--text-info); }
-  .tag-womens { background: var(--bg-warning); color: var(--text-warning); }
-  .tag-mixed  { background: var(--accent-dim); color: var(--accent); }
+  .tag-mens {
+    background: var(--bg-info);
+    color: var(--text-info);
+  }
+  .tag-womens {
+    background: var(--bg-warning);
+    color: var(--text-warning);
+  }
+  .tag-mixed {
+    background: var(--accent-dim);
+    color: var(--accent);
+  }
 
   /* ─── Body ──────────────────────────────────────────────────────────────── */
   .preset-body {
@@ -231,7 +254,9 @@
     text-overflow: ellipsis;
     max-width: 100%;
   }
-  .preset-name:hover { color: var(--accent); }
+  .preset-name:hover {
+    color: var(--accent);
+  }
 
   .name-input {
     font-size: 13px;
@@ -265,7 +290,9 @@
   .delete-btn {
     color: var(--text-muted);
     opacity: 0.5;
-    transition: opacity 0.15s, color 0.15s;
+    transition:
+      opacity 0.15s,
+      color 0.15s;
   }
 
   .preset-item:hover .rename-btn,
@@ -273,6 +300,10 @@
     opacity: 1;
   }
 
-  .delete-btn:hover { color: var(--color-error) !important; }
-  .rename-btn:hover { color: var(--accent) !important; }
+  .delete-btn:hover {
+    color: var(--color-error) !important;
+  }
+  .rename-btn:hover {
+    color: var(--accent) !important;
+  }
 </style>

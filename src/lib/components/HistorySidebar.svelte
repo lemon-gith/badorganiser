@@ -1,12 +1,19 @@
 <script lang="ts">
-  import Icon from './Icon.svelte';
+  import Icon from "./Icon.svelte";
   import {
-    ui, toggleHistory, setSortKey, setSortDir, sortMetas,
-  } from '../stores/settings.svelte.ts';
+    ui,
+    toggleHistory,
+    setSortKey,
+    setSortDir,
+    sortMetas,
+  } from "../stores/settings.svelte.ts";
   import {
-    sessionState, loadSession, deleteSession, clearCurrentSession,
-  } from '../stores/sessions.svelte.ts';
-  import type { SortKey } from '../types';
+    sessionState,
+    loadSession,
+    deleteSession,
+    clearCurrentSession,
+  } from "../stores/sessions.svelte.ts";
+  import type { SortKey } from "../types";
 
   // ─── Sort dropdown ────────────────────────────────────────────────────────
   let dropdownOpen = $state(false);
@@ -21,22 +28,27 @@
       }
     }
 
-    document.addEventListener('pointerdown', onOutsideClick, true);
-    return () => document.removeEventListener('pointerdown', onOutsideClick, true);
+    document.addEventListener("pointerdown", onOutsideClick, true);
+    return () =>
+      document.removeEventListener("pointerdown", onOutsideClick, true);
   });
 
-  const sorted = $derived(sortMetas(sessionState.metas, ui.sortKey, ui.sortDir));
+  const sorted = $derived(
+    sortMetas(sessionState.metas, ui.sortKey, ui.sortDir),
+  );
 
   const SORT_LABELS: Record<SortKey, string> = {
-    name:         'Session Name',
-    createdAt:    'Time Created',
-    lastModified: 'Last Modified',
+    name: "Session Name",
+    createdAt: "Time Created",
+    lastModified: "Last Modified",
   };
 
   function formatDate(ts: number): string {
     const d = new Date(ts);
-    return d.toLocaleDateString('en-GB', {
-      day: '2-digit', month: 'short', year: 'numeric',
+    return d.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
     });
   }
 
@@ -55,7 +67,9 @@
       confirmDelete = null;
     } else {
       confirmDelete = id;
-      setTimeout(() => { if (confirmDelete === id) confirmDelete = null; }, 3000);
+      setTimeout(() => {
+        if (confirmDelete === id) confirmDelete = null;
+      }, 3000);
     }
   }
 </script>
@@ -89,12 +103,15 @@
               <button
                 class="dropdown-item dir-toggle"
                 onclick={() => {
-                  setSortDir(ui.sortDir === 'asc' ? 'desc' : 'asc');
+                  setSortDir(ui.sortDir === "asc" ? "desc" : "asc");
                   dropdownOpen = false;
                 }}
               >
-                <Icon name={ui.sortDir === 'asc' ? 'arrow-down' : 'arrow-up'} size={14} />
-                {ui.sortDir === 'asc' ? 'Descending' : 'Ascending'}
+                <Icon
+                  name={ui.sortDir === "asc" ? "arrow-down" : "arrow-up"}
+                  size={14}
+                />
+                {ui.sortDir === "asc" ? "Descending" : "Ascending"}
               </button>
             </div>
 
@@ -127,7 +144,10 @@
       <!-- New session -->
       <button
         class="btn-icon"
-        onclick={() => { clearCurrentSession(); if (window.innerWidth <= 768) toggleHistory(); }}
+        onclick={() => {
+          clearCurrentSession();
+          if (window.innerWidth <= 768) toggleHistory();
+        }}
         title="New session"
         aria-label="New session"
       >
@@ -139,7 +159,9 @@
   <!-- ─── Session list ───────────────────────────────────────────────────── -->
   <div class="session-list">
     {#if sorted.length === 0}
-      <p class="empty-state">No sessions yet.<br />Upload a CSV to get started.</p>
+      <p class="empty-state">
+        No sessions yet.<br />Upload a CSV to get started.
+      </p>
     {:else}
       {#each sorted as meta (meta.id)}
         {@const isActive = sessionState.currentData?.id === meta.id}
@@ -149,7 +171,7 @@
           role="button"
           tabindex="0"
           onclick={() => handleLoad(meta.id)}
-          onkeydown={(e) => e.key === 'Enter' && handleLoad(meta.id)}
+          onkeydown={(e) => e.key === "Enter" && handleLoad(meta.id)}
         >
           <div class="session-info">
             <span class="session-name truncate">{meta.name}</span>
@@ -159,7 +181,9 @@
             class="btn-icon delete-btn"
             class:confirming={confirmDelete === meta.id}
             onclick={(e) => handleDelete(e, meta.id)}
-            title={confirmDelete === meta.id ? 'Click again to confirm delete' : 'Delete session'}
+            title={confirmDelete === meta.id
+              ? "Click again to confirm delete"
+              : "Delete session"}
             aria-label="Delete session"
           >
             <Icon name="trash" size={14} />
@@ -173,8 +197,8 @@
   <div class="storage-warning">
     <Icon name="alert-triangle" size={14} />
     <p>
-      All session data is stored in <strong>this browser only</strong>.
-      Clearing browser data or switching browsers will remove your history.
+      All session data is stored in <strong>this browser only</strong>. Clearing
+      browser data or switching browsers will remove your history.
     </p>
   </div>
 </aside>
@@ -209,7 +233,7 @@
   }
 
   .sidebar-title h3 {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 1rem;
     letter-spacing: 0.06em;
     color: var(--text-primary);
@@ -242,11 +266,19 @@
   }
 
   @keyframes dropIn {
-    from { opacity: 0; transform: translateY(-6px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
-  .dropdown-section { padding: 4px; }
+  .dropdown-section {
+    padding: 4px;
+  }
 
   .dropdown-divider {
     height: 1px;
@@ -270,10 +302,19 @@
     background: var(--bg-hover);
     color: var(--text-primary);
   }
-  .dropdown-item.selected { color: var(--accent); font-weight: 600; }
-  .dropdown-item.dir-toggle { color: var(--text-primary); font-weight: 500; }
+  .dropdown-item.selected {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .dropdown-item.dir-toggle {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
 
-  .dot-spacer { width: 13px; flex-shrink: 0; }
+  .dot-spacer {
+    width: 13px;
+    flex-shrink: 0;
+  }
 
   /* ─── Session list ─────────────────────────────────────────────────────── */
   .session-list {
@@ -300,8 +341,12 @@
     transition: background 0.12s ease;
     outline: none;
   }
-  .session-item:hover    { background: var(--bg-hover); }
-  .session-item:focus-visible { box-shadow: 0 0 0 2px var(--accent); }
+  .session-item:hover {
+    background: var(--bg-hover);
+  }
+  .session-item:focus-visible {
+    box-shadow: 0 0 0 2px var(--accent);
+  }
   .session-item.active {
     background: var(--accent-dim);
     border-left: 3px solid var(--accent);
@@ -329,16 +374,22 @@
 
   .delete-btn {
     opacity: 0;
-    transition: opacity 0.15s, color 0.15s;
+    transition:
+      opacity 0.15s,
+      color 0.15s;
     color: var(--text-muted);
   }
-  .session-item:hover .delete-btn { opacity: 1; }
+  .session-item:hover .delete-btn {
+    opacity: 1;
+  }
   .delete-btn.confirming {
     opacity: 1;
     color: var(--color-error) !important;
     background: var(--bg-error);
   }
-  .delete-btn:hover { color: var(--color-error) !important; }
+  .delete-btn:hover {
+    color: var(--color-error) !important;
+  }
 
   /* ─── Storage warning ──────────────────────────────────────────────────── */
   .storage-warning {
@@ -356,5 +407,7 @@
     flex-shrink: 0;
   }
 
-  .storage-warning p { flex: 1; }
+  .storage-warning p {
+    flex: 1;
+  }
 </style>

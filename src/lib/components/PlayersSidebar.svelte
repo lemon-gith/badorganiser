@@ -1,13 +1,21 @@
 <script lang="ts">
-  import Icon from './Icon.svelte';
-  import { sessionState } from '../stores/sessions.svelte.ts';
+  import Icon from "./Icon.svelte";
+  import { sessionState } from "../stores/sessions.svelte.ts";
 
   const players = $derived(sessionState.currentData?.players ?? []);
 
-  const men   = $derived(players.filter((p) => p.gender === 'M').sort((a, b) => a.level - b.level || a.name.localeCompare(b.name)));
-  const women = $derived(players.filter((p) => p.gender === 'F').sort((a, b) => a.level - b.level || a.name.localeCompare(b.name)));
+  const men = $derived(
+    players
+      .filter((p) => p.gender === "M")
+      .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name)),
+  );
+  const women = $derived(
+    players
+      .filter((p) => p.gender === "F")
+      .sort((a, b) => a.level - b.level || a.name.localeCompare(b.name)),
+  );
 
-  const displayed = $derived(sessionState.playersTab === 'men' ? men : women);
+  const displayed = $derived(sessionState.playersTab === "men" ? men : women);
 
   function levelLabel(level: number): string {
     return `L${level}`;
@@ -36,16 +44,16 @@
   <div class="tabs">
     <button
       class="tab"
-      class:active={sessionState.playersTab === 'men'}
-      onclick={() => (sessionState.playersTab = 'men')}
+      class:active={sessionState.playersTab === "men"}
+      onclick={() => (sessionState.playersTab = "men")}
     >
       Men
       <span class="tab-count">{men.length}</span>
     </button>
     <button
       class="tab"
-      class:active={sessionState.playersTab === 'women'}
-      onclick={() => (sessionState.playersTab = 'women')}
+      class:active={sessionState.playersTab === "women"}
+      onclick={() => (sessionState.playersTab = "women")}
     >
       Women
       <span class="tab-count">{women.length}</span>
@@ -113,7 +121,7 @@
   }
 
   .header-left h3 {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 1rem;
     letter-spacing: 0.06em;
     color: var(--text-primary);
@@ -129,8 +137,12 @@
     line-height: 1.6;
   }
 
-  .close-btn { color: var(--text-muted); }
-  .close-btn:hover { color: var(--text-primary); }
+  .close-btn {
+    color: var(--text-muted);
+  }
+  .close-btn:hover {
+    color: var(--text-primary);
+  }
 
   /* ─── Tabs ──────────────────────────────────────────────────────────────── */
   .tabs {
@@ -146,13 +158,17 @@
     font-weight: 500;
     color: var(--text-muted);
     border-bottom: 2px solid transparent;
-    transition: color 0.15s, border-color 0.15s;
+    transition:
+      color 0.15s,
+      border-color 0.15s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
   }
-  .tab:hover { color: var(--text-primary); }
+  .tab:hover {
+    color: var(--text-primary);
+  }
   .tab.active {
     color: var(--accent);
     border-bottom-color: var(--accent);
@@ -192,12 +208,14 @@
     border-radius: var(--radius-sm);
     transition: background 0.1s;
   }
-  .player-row:hover { background: var(--bg-hover); }
+  .player-row:hover {
+    background: var(--bg-hover);
+  }
 
   .level-badge {
     font-size: 10px;
     font-weight: 700;
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     letter-spacing: 0.05em;
     background: var(--accent-dim);
     color: var(--accent);

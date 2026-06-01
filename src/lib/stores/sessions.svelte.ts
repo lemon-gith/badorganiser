@@ -10,10 +10,10 @@ const MAX_GENERATED = 5;
 // ─── Reactive state ───────────────────────────────────────────────────────────
 
 export const sessionState = $state({
-  metas:       [] as SessionMeta[],
+  metas: [] as SessionMeta[],
   currentData: null as SessionData | null,
   showPlayers: false,
-  playersTab:  'men' as 'men' | 'women',
+  playersTab: 'men' as 'men' | 'women',
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -24,10 +24,10 @@ function raw<T>(val: T): T {
 }
 
 function buildToggles(players: Player[]): ToggleSettings {
-  const menLevels  = [...new Set(players.filter((p) => p.gender === 'M').map((p) => p.level))];
-  const womenLevels= [...new Set(players.filter((p) => p.gender === 'F').map((p) => p.level))];
+  const menLevels = [...new Set(players.filter((p) => p.gender === 'M').map((p) => p.level))];
+  const womenLevels = [...new Set(players.filter((p) => p.gender === 'F').map((p) => p.level))];
   return {
-    men:   Object.fromEntries(menLevels.map((l) => [l, true])),
+    men: Object.fromEntries(menLevels.map((l) => [l, true])),
     women: Object.fromEntries(womenLevels.map((l) => [l, true])),
   };
 }
@@ -52,21 +52,21 @@ export async function loadMetas(): Promise<void> {
 }
 
 export async function createSession(players: Player[]): Promise<void> {
-  const id  = crypto.randomUUID();
+  const id = crypto.randomUUID();
   const now = Date.now();
 
   const data: SessionData = {
     id,
     players,
-    levelToggles:    buildToggles(players),
-    presetItems:     [],
-    generatedPresets:[],
+    levelToggles: buildToggles(players),
+    presetItems: [],
+    generatedPresets: [],
   };
 
   const meta: SessionMeta = {
     id,
-    name:         `Session ${new Date(now).toLocaleDateString('en-GB')}`,
-    createdAt:    now,
+    name: `Session ${new Date(now).toLocaleDateString('en-GB')}`,
+    createdAt: now,
     lastModified: now,
   };
 
@@ -84,13 +84,13 @@ export async function loadSession(id: string): Promise<void> {
 
 export function clearCurrentSession(): void {
   sessionState.currentData = null;
-  sessionState.showPlayers  = false;
+  sessionState.showPlayers = false;
 }
 
 export async function renameSession(id: string, name: string): Promise<void> {
   const meta = sessionState.metas.find((m) => m.id === id);
   if (!meta) return;
-  meta.name         = name;
+  meta.name = name;
   meta.lastModified = Date.now();
   await db.saveSessionMeta(raw(meta));
 }
@@ -100,7 +100,7 @@ export async function deleteSession(id: string): Promise<void> {
   sessionState.metas = sessionState.metas.filter((m) => m.id !== id);
   if (sessionState.currentData?.id === id) {
     sessionState.currentData = null;
-    sessionState.showPlayers  = false;
+    sessionState.showPlayers = false;
   }
 }
 
@@ -123,8 +123,8 @@ export async function addPresetItem(gameType: GameType): Promise<void> {
   const count = data.presetItems.filter((p) => p.gameType === gameType).length + 1;
 
   const item: PresetItemData = {
-    id:             crypto.randomUUID(),
-    name:           `${gameLabels[gameType]} Preset ${count}`,
+    id: crypto.randomUUID(),
+    name: `${gameLabels[gameType]} Preset ${count}`,
     gameType,
     toggleSettings: raw(data.levelToggles), // snapshot at time of creation
   };
@@ -136,7 +136,7 @@ export async function addPresetItem(gameType: GameType): Promise<void> {
 export async function removePresetItem(presetId: string): Promise<void> {
   const data = sessionState.currentData;
   if (!data) return;
-  data.presetItems      = data.presetItems.filter((p) => p.id !== presetId);
+  data.presetItems = data.presetItems.filter((p) => p.id !== presetId);
   data.generatedPresets = data.generatedPresets.filter((g) => g.presetId !== presetId);
   await persistCurrent();
 }
@@ -156,7 +156,7 @@ export async function generatePreset(presetId: string): Promise<void> {
   const item = data.presetItems.find((p) => p.id === presetId);
   if (!item) return;
 
-  const pairs      = generatePairings(data.players, item.gameType, item.toggleSettings);
+  const pairs = generatePairings(data.players, item.gameType, item.toggleSettings);
   const csvContent = pairingsToCsv(pairs);
 
   const entry: GeneratedPreset = { presetId, csvContent, generatedAt: Date.now() };

@@ -1,21 +1,21 @@
 <script lang="ts">
-  import Icon from './Icon.svelte';
-  import { parseCSV } from '../utils/csvParser';
-  import { createSession } from '../stores/sessions.svelte.ts';
-  import { showBanner } from '../stores/banners.svelte.ts';
+  import Icon from "./Icon.svelte";
+  import { parseCSV } from "../utils/csvParser";
+  import { createSession } from "../stores/sessions.svelte.ts";
+  import { showBanner } from "../stores/banners.svelte.ts";
 
   // ─── Greeting ─────────────────────────────────────────────────────────────
   function greeting(): string {
     const h = new Date().getHours();
-    if (h >= 5  && h < 12) return 'Good Morning';
-    if (h >= 12 && h < 17) return 'Good Afternoon';
-    if (h >= 17 && h < 21) return 'Good Evening';
-    return 'Good Night';
+    if (h >= 5 && h < 12) return "Good Morning";
+    if (h >= 12 && h < 17) return "Good Afternoon";
+    if (h >= 17 && h < 21) return "Good Evening";
+    return "Good Night";
   }
 
   // ─── Upload state ─────────────────────────────────────────────────────────
-  type UploadState = 'idle' | 'processing' | 'done' | 'error';
-  let uploadState = $state<UploadState>('idle');
+  type UploadState = "idle" | "processing" | "done" | "error";
+  let uploadState = $state<UploadState>("idle");
   let fileInput = $state<HTMLInputElement | undefined>();
 
   function triggerUpload() {
@@ -25,17 +25,24 @@
   async function handleFile(e: Event) {
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!fileInput) return;
-    fileInput.value = '';           // allow re-uploading same file
+    fileInput.value = ""; // allow re-uploading same file
 
     if (!file) return;
 
     // Basic format check
-    if (!file.name.endsWith('.csv') && file.type !== 'text/csv' && file.type !== 'text/plain') {
-      showBanner('error', 'Please upload a CSV file (.csv extension required).');
+    if (
+      !file.name.endsWith(".csv") &&
+      file.type !== "text/csv" &&
+      file.type !== "text/plain"
+    ) {
+      showBanner(
+        "error",
+        "Please upload a CSV file (.csv extension required).",
+      );
       return;
     }
 
-    uploadState = 'processing';
+    uploadState = "processing";
 
     try {
       const text = await file.text();
@@ -45,31 +52,40 @@
 
       if (errors.length > 0 && players.length === 0) {
         // Fatal parse error
-        uploadState = 'error';
-        showBanner('error', errors[0], 0);
-        setTimeout(() => { uploadState = 'idle'; }, 1500);
+        uploadState = "error";
+        showBanner("error", errors[0], 0);
+        setTimeout(() => {
+          uploadState = "idle";
+        }, 1500);
         return;
       }
 
       if (errors.length > 0) {
         // Partial parse — warn but continue
-        errors.forEach((msg) => showBanner('warning', msg, 6000));
+        errors.forEach((msg) => showBanner("warning", msg, 6000));
       }
 
       if (players.length === 0) {
-        uploadState = 'error';
-        showBanner('error', 'No valid player rows found in the uploaded file.');
-        setTimeout(() => { uploadState = 'idle'; }, 1500);
+        uploadState = "error";
+        showBanner("error", "No valid player rows found in the uploaded file.");
+        setTimeout(() => {
+          uploadState = "idle";
+        }, 1500);
         return;
       }
 
-      showBanner('success', `CSV uploaded — ${players.length} player(s) loaded successfully.`);
+      showBanner(
+        "success",
+        `CSV uploaded — ${players.length} player(s) loaded successfully.`,
+      );
       await createSession(players);
-      uploadState = 'done';
+      uploadState = "done";
     } catch (err) {
-      uploadState = 'error';
-      showBanner('error', `Failed to read file: ${(err as Error).message}`);
-      setTimeout(() => { uploadState = 'idle'; }, 1500);
+      uploadState = "error";
+      showBanner("error", `Failed to read file: ${(err as Error).message}`);
+      setTimeout(() => {
+        uploadState = "idle";
+      }, 1500);
     }
   }
 </script>
@@ -96,12 +112,12 @@
       <button
         class="btn btn-primary upload-btn"
         onclick={triggerUpload}
-        disabled={uploadState === 'processing' || uploadState === 'done'}
+        disabled={uploadState === "processing" || uploadState === "done"}
       >
-        {#if uploadState === 'processing'}
+        {#if uploadState === "processing"}
           <Icon name="loader" size={16} class="spin" />
           Processing…
-        {:else if uploadState === 'done'}
+        {:else if uploadState === "done"}
           <Icon name="check-circle" size={16} />
           Loaded
         {:else}
@@ -127,9 +143,9 @@
         Expected CSV format
       </h4>
       <p class="format-note">
-        The file must have five columns in the order below. A header row is optional
-        — if present, column names are matched fuzzily so minor variations are fine.
-        Extra columns are ignored.
+        The file must have five columns in the order below. A header row is
+        optional — if present, column names are matched fuzzily so minor
+        variations are fine. Extra columns are ignored.
       </p>
       <div class="table-wrapper">
         <table>
@@ -161,9 +177,14 @@
         </table>
       </div>
       <ul class="format-notes-list">
-        <li><strong>gender</strong> — M / F, Male / Female (case-insensitive)</li>
+        <li>
+          <strong>gender</strong> — M / F, Male / Female (case-insensitive)
+        </li>
         <li><strong>level</strong> — any integer (e.g. 1, 2, 3…)</li>
-        <li><strong>level_matches / mixed_matches</strong> — true / false, yes / no, 1 / 0</li>
+        <li>
+          <strong>level_matches / mixed_matches</strong> — true / false, yes / no,
+          1 / 0
+        </li>
       </ul>
     </div>
   </div>
@@ -188,7 +209,9 @@
   }
 
   /* ─── Greeting ──────────────────────────────────────────────────────────── */
-  .greeting-block { line-height: 1.2; }
+  .greeting-block {
+    line-height: 1.2;
+  }
 
   .greeting-text {
     font-size: 14px;
@@ -197,7 +220,7 @@
   }
 
   .greeting-prompt {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: clamp(2rem, 5vw, 3rem);
     letter-spacing: 0.04em;
     color: var(--text-heading);
@@ -229,7 +252,9 @@
     border-radius: var(--radius-md);
     color: var(--text-secondary);
     border: 1px solid var(--border);
-    transition: background 0.15s, border-color 0.15s;
+    transition:
+      background 0.15s,
+      border-color 0.15s;
     text-decoration: none;
   }
   .download-link:hover {
@@ -254,7 +279,7 @@
     display: flex;
     align-items: center;
     gap: 7px;
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 0.95rem;
     letter-spacing: 0.06em;
     color: var(--text-primary);
@@ -293,8 +318,12 @@
     color: var(--text-primary);
     border-bottom: 1px solid var(--border);
   }
-  tr:last-child td { border-bottom: none; }
-  tbody tr:nth-child(even) { background: var(--bg-app); }
+  tr:last-child td {
+    border-bottom: none;
+  }
+  tbody tr:nth-child(even) {
+    background: var(--bg-app);
+  }
 
   .format-notes-list {
     list-style: none;
@@ -307,7 +336,7 @@
   }
 
   .format-notes-list li::before {
-    content: '·  ';
+    content: "·  ";
     color: var(--accent);
     font-weight: 700;
   }

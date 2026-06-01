@@ -1,12 +1,12 @@
 <script lang="ts">
-  import Icon from './Icon.svelte';
-  import { bannerState, dismissBanner } from '../stores/banners.svelte.ts';
+  import Icon from "./Icon.svelte";
+  import { bannerState, dismissBanner } from "../stores/banners.svelte.ts";
 
   const iconMap = {
-    success: 'check-circle',
-    error:   'alert-circle',
-    warning: 'alert-triangle',
-    info:    'info',
+    success: "check-circle",
+    error: "alert-circle",
+    warning: "alert-triangle",
+    info: "info",
   } as const;
 </script>
 
@@ -55,8 +55,14 @@
   }
 
   @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-12px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 
   .banner--success {
@@ -90,5 +96,7 @@
     opacity: 0.6;
     flex-shrink: 0;
   }
-  .banner-close:hover { opacity: 1; }
+  .banner-close:hover {
+    opacity: 1;
+  }
 </style>

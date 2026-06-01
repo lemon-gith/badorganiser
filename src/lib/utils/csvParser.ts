@@ -12,14 +12,14 @@ type ColKey = keyof Pick<Player, 'name' | 'gender' | 'level' | 'levelMatches' | 
 // ─── Header matching ──────────────────────────────────────────────────────────
 
 const HEADER_VARIANTS: Record<ColKey, string[]> = {
-  name:         ['name', 'playername', 'player name', 'player'],
-  gender:       ['gender', 'sex', 'g'],
-  level:        ['level', 'skill', 'skilllevel', 'skill level'],
+  name: ['name', 'playername', 'player name', 'player'],
+  gender: ['gender', 'sex', 'g'],
+  level: ['level', 'skill', 'skilllevel', 'skill level'],
   levelMatches: ['levelmatches', 'level matches', 'level_matches', 'samegender',
-                 'same gender', 'same gender matches', 'levelmatch', 'level match',
-                 'level doubles'],
+    'same gender', 'same gender matches', 'levelmatch', 'level match',
+    'level doubles'],
   mixedMatches: ['mixedmatches', 'mixed matches', 'mixed_matches', 'mixed',
-                 'mixed doubles', 'mixedmatch', 'mixed match'],
+    'mixed doubles', 'mixedmatch', 'mixed match'],
 };
 
 const REQUIRED_KEYS: ColKey[] = ['name', 'gender', 'level', 'levelMatches', 'mixedMatches'];
@@ -92,7 +92,7 @@ export function parseCSV(raw: string): ParseResult {
         players: [],
         errors: [
           `Row ${i + 1} has ${rows[i].length} column(s) but the first row has ${colCount}. ` +
-            'Please check for stray commas or unmatched quotes.',
+          'Please check for stray commas or unmatched quotes.',
         ],
       };
     }
@@ -103,7 +103,7 @@ export function parseCSV(raw: string): ParseResult {
       players: [],
       errors: [
         `Expected at least 5 columns but found ${colCount}. ` +
-          'Required columns: name, gender, level, level_matches, mixed_matches.',
+        'Required columns: name, gender, level, level_matches, mixed_matches.',
       ],
     };
   }
@@ -127,7 +127,7 @@ export function parseCSV(raw: string): ParseResult {
         players: [],
         errors: [
           `Missing expected column(s): ${missing.join(', ')}. ` +
-            'Please check your header row — all five columns are required.',
+          'Please check your header row — all five columns are required.',
         ],
       };
     }

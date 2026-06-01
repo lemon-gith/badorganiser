@@ -7,16 +7,16 @@ function lsGet(key: string, fallback: string): string {
 }
 
 function lsSet(key: string, val: string): void {
-  try { localStorage.setItem(key, val); } catch {}
+  try { localStorage.setItem(key, val); } catch { }
 }
 
 // ─── Reactive state ───────────────────────────────────────────────────────────
 
 export const ui = $state({
-  darkMode:    lsGet('darkMode',    'false') === 'true',
-  showHistory: lsGet('showHistory', 'true')  === 'true',
-  sortKey:     lsGet('sortKey',     'lastModified') as SortKey,
-  sortDir:     lsGet('sortDir',     'desc')         as SortDir,
+  darkMode: lsGet('darkMode', 'false') === 'true',
+  showHistory: lsGet('showHistory', 'true') === 'true',
+  sortKey: lsGet('sortKey', 'lastModified') as SortKey,
+  sortDir: lsGet('sortDir', 'desc') as SortDir,
 });
 
 // ─── Actions ──────────────────────────────────────────────────────────────────
@@ -50,9 +50,9 @@ export function sortMetas(
 ): SessionMeta[] {
   return [...metas].sort((a, b) => {
     let cmp: number;
-    if      (key === 'name')         cmp = a.name.localeCompare(b.name);
-    else if (key === 'createdAt')    cmp = a.createdAt    - b.createdAt;
-    else                             cmp = a.lastModified - b.lastModified;
+    if (key === 'name') cmp = a.name.localeCompare(b.name);
+    else if (key === 'createdAt') cmp = a.createdAt - b.createdAt;
+    else cmp = a.lastModified - b.lastModified;
     return dir === 'asc' ? cmp : -cmp;
   });
 }

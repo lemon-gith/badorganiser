@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Icon from './Icon.svelte';
-  import { ui, toggleDark, toggleHistory } from '../stores/settings.svelte.ts';
+  import Icon from "./Icon.svelte";
+  import { ui, toggleDark, toggleHistory } from "../stores/settings.svelte.ts";
 </script>
 
 <header class="topbar">
@@ -22,8 +22,8 @@
     <button
       class="btn-icon topbar-btn"
       onclick={toggleDark}
-      title={ui.darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
-      aria-label={ui.darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={ui.darkMode ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={ui.darkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       {#if ui.darkMode}
         <Icon name="sun" size={18} />
@@ -70,7 +70,7 @@
   }
 
   .title-main {
-    font-family: 'Bebas Neue', sans-serif;
+    font-family: "Bebas Neue", sans-serif;
     font-size: 1.5rem;
     letter-spacing: 0.08em;
     white-space: nowrap;

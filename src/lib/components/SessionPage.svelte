@@ -102,20 +102,29 @@
 </script>
 
 <section class="session-page">
-  <!-- ─── Explanation ────────────────────────────────────────────────────── -->
+  <!-- ------------ Explanation ------------ -->
   <div class="intro">
+    <ol>
+      <li>
+        Use the <strong>Level Filters</strong> below to include or exclude players
+        of different levels from pairings
+      </li>
+      <li>
+        Press one of the three game-type buttons to queue a preset. Each preset
+        captures a snapshot of the current toggle settings.
+      </li>
+      <li>
+        Click <strong>Generate</strong> to compute all valid pairings, then
+        <strong>Download</strong> to save the result as a CSV.
+      </li>
+    </ol>
     <p>
-      Use the <strong>level filters</strong> below to include or exclude player
-      tiers from pairings, then press one of the three game-type buttons to
-      queue a preset. Each preset captures a snapshot of the current toggle
-      settings. Click <strong>Generate</strong> to compute all valid pairings,
-      then
-      <strong>Download</strong> to save the result as a CSV. The last 5 generated
-      presets are cached — older ones must be regenerated.
+      You can click on <strong>View Players</strong> to view your imported players
+      and their details.
     </p>
   </div>
 
-  <!-- ─── View Players button (hidden when sidebar is open) ─────────────── -->
+  <!-- --------- View Players button (hidden when sidebar is open) --------- -->
   {#if !sessionState.showPlayers}
     <div class="view-players-row">
       <button
@@ -128,7 +137,7 @@
     </div>
   {/if}
 
-  <!-- ─── Level Toggles ─────────────────────────────────────────────────── -->
+  <!-- --------------------------- Level Toggles --------------------------- -->
   <div class="toggles-card">
     <h4 class="card-title">Level Filters</h4>
     <div class="toggles-grid">
@@ -183,6 +192,7 @@
   </div>
 
   <!-- ─── Game Type Buttons ──────────────────────────────────────────────── -->
+  <h4 class="game-buttons-title">Generate Presets</h4>
   <div class="game-type-row">
     <button
       class="game-btn game-btn--mens"
@@ -260,7 +270,7 @@
     background: var(--bg-surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 16px 20px;
+    padding: 16px 32px;
     font-size: 13.5px;
     color: var(--text-secondary);
     line-height: 1.7;
@@ -357,6 +367,15 @@
   }
 
   /* ─── Game-type buttons ──────────────────────────────────────────────────── */
+
+  .game-buttons-title {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+    color: var(--text-primary);
+    margin-bottom: -10px;
+  }
+
   .game-type-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;

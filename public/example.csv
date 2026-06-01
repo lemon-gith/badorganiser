@@ -1,0 +1,21 @@
+name,gender,level,level_matches,mixed_matches
+Alice Chen,F,3,true,true
+Bob Smith,M,2,true,false
+Carol Davis,F,1,true,true
+David Lee,M,3,false,true
+Emma Wilson,F,2,true,true
+Frank Brown,M,1,true,true
+Grace Kim,F,3,true,false
+Henry Taylor,M,2,true,true
+Iris Martinez,F,1,false,true
+James Johnson,M,3,true,true
+Kate Anderson,F,2,true,true
+Liam Thompson,M,1,true,false
+Mia Garcia,F,3,true,true
+Noah Clark,M,2,false,true
+Olivia Lewis,F,1,true,true
+Paul Walker,M,3,true,true
+Quinn Robinson,F,2,true,false
+Ryan Hall,M,1,true,true
+Sarah Young,F,3,false,true
+Tom King,M,2,true,true
